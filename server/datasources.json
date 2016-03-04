@@ -2,5 +2,18 @@
   "db": {
     "name": "db",
     "connector": "memory"
+  },
+  "redisDS": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "database": "1",
+    "name": "redisDS",
+    "connector": "redis"
+  },
+  "OrderSoap": {
+    "url": "http://122.225.60.230:7008/PC_API/OrderService.svc",
+    "name": "OrderSoap",
+    "connector": "soap",
+    "wsdl": "http://122.225.60.230:7008/PC_API/OrderService.svc?WSDL"
   }
 }
