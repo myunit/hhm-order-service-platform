@@ -73,3 +73,23 @@ exports.cancelOrderXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.reBuyByOrderIdXML = function (obj) {
+  var xmlObj = [{
+    ReBuyByOrderSysNo: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        customerSysNo: obj.userId
+      },
+      {
+        orderId: obj.orderId
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};

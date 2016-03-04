@@ -131,5 +131,42 @@ module.exports = function (Order) {
       }
     );
 
+    //根据订单号再次购买
+    Order.reBuyByOrderId = function (data, cb) {
+      orderIFS.reBuyByOrderId(data, function (err, res) {
+        if (err) {
+          console.log('reBuyByOrderId err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('reBuyByOrderId result err: ' + res.ErrorInfo);
+          cb(null, {status: 0, msg: res.ErrorInfo});
+        } else {
+          cb(null, {status: 1, msg: '购买成功'});
+        }
+      });
+    };
+
+    Order.remoteMethod(
+      'reBuyByOrderId',
+      {
+        description: [
+          '根据订单号再次购买.返回结果-status:操作结果 0 失败 1 成功, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '根据订单号再次购买 {"userId":int, "orderId":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/rebuy-by-orderId', verb: 'post'}
+      }
+    );
+
   });
 };

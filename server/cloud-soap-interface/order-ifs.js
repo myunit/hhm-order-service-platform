@@ -51,3 +51,16 @@ OrderIFS.prototype.cancelOrder = function (obj, callback) {
     }
   });
 };
+
+OrderIFS.prototype.reBuyByOrderId = function (obj, callback) {
+  var Order = this.DS.models.Order;
+  var xml = orderObj.reBuyByOrderIdXML(obj);
+  Order.ReBuyByOrderSysNo(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.ReBuyByOrderSysNoResult));
+    } catch (e) {
+      console.error('OrderIFS reBuyByOrderId Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};
