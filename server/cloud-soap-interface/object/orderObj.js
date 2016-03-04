@@ -53,3 +53,23 @@ exports.getOrderDetailXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.cancelOrderXML = function (obj) {
+  var xmlObj = [{
+    CancelOrder: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        customerSysNo: obj.userId
+      },
+      {
+        orderSysNo: obj.orderId
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};

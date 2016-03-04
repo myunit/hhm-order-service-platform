@@ -90,5 +90,46 @@ module.exports = function (Order) {
       }
     );
 
+    //取消订单
+    Order.cancelOrder = function (data, cb) {
+      orderIFS.cancelOrder(data, function (err, res) {
+        if (err) {
+          console.log('cancelOrder err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('cancelOrder result err: ' + res.ErrorInfo);
+          cb(null, {status: 0, msg: res.ErrorInfo});
+        } else {
+          if (res.ResultStr === 'True') {
+            cb(null, {status: 1, msg: '取消成功'});
+          } else {
+            cb(null, {status: 0, msg: '取消失败'});
+          }
+        }
+      });
+    };
+
+    Order.remoteMethod(
+      'cancelOrder',
+      {
+        description: [
+          '取消订单.返回结果-status:操作结果 0 失败 1 成功, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '取消订单 {"userId":int, "orderId":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/cancel-order', verb: 'post'}
+      }
+    );
+
   });
 };

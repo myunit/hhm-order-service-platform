@@ -27,6 +27,13 @@
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "getOrderDetail"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "cancelOrder"
     }
   ],
   "methods": {}
