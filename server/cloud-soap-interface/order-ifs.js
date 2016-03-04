@@ -25,3 +25,16 @@ OrderIFS.prototype.getOrderList = function (obj, callback) {
     }
   });
 };
+
+OrderIFS.prototype.getOrderDetail = function (obj, callback) {
+  var Order = this.DS.models.Order;
+  var xml = orderObj.getOrderDetailXML(obj);
+  Order.OrderForDetail(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.OrderForDetailResult));
+    } catch (e) {
+      console.error('OrderIFS getOrderDetail Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};

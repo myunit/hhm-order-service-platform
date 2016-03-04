@@ -24,7 +24,7 @@ module.exports = function (Order) {
           console.error('getOrderList result err: ' + res.ErrorInfo);
           cb(null, {status: 0, msg: res.ErrorInfo});
         } else {
-          console.log('order: ' + JSON.stringify(order));
+          var order = JSON.parse(res.ResultStr);
           cb(null, {status: 1, count: order.Counts, order: order.Datas, msg: ''});
         }
       });
@@ -48,6 +48,45 @@ module.exports = function (Order) {
         ],
         returns: {arg: 'repData', type: 'string'},
         http: {path: '/get-order-list', verb: 'post'}
+      }
+    );
+
+    //获取订单详情
+    Order.getOrderDetail = function (data, cb) {
+      orderIFS.getOrderDetail(data, function (err, res) {
+        if (err) {
+          console.log('getOrderDetail err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res.IsSuccess) {
+          console.error('getOrderDetail result err: ' + res.ErrorDescription);
+          cb(null, {status: 0, msg: res.ErrorDescription});
+        } else {
+          delete res.IsSuccess;
+          delete res.ErrorDescription;
+          cb(null, {status: 1, order: res, msg: ''});
+        }
+      });
+    };
+
+    Order.remoteMethod(
+      'getOrderDetail',
+      {
+        description: [
+          '获取订单详情.返回结果-status:操作结果 0 失败 1 成功, order:订单信息, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '获取订单详情 {"userId":int, "orderId":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/get-order-detail', verb: 'post'}
       }
     );
 

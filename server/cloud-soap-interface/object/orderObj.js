@@ -33,3 +33,23 @@ exports.getOrderListXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.getOrderDetailXML = function (obj) {
+  var xmlObj = [{
+    OrderForDetail: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        uId: obj.userId
+      },
+      {
+        orderId: obj.orderId
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
