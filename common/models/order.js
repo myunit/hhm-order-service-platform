@@ -4,6 +4,7 @@
  * @description
  */
 var loopback = require('loopback');
+var async = require('async');
 var OrderIFS = require('../../server/cloud-soap-interface/order-ifs');
 var ShoppingIFS = require('../../server/cloud-soap-interface/shopping-ifs');
 
@@ -186,11 +187,11 @@ module.exports = function (Order) {
                 console.error('createPayment result err: ' + res.ErrorDescription);
                 cb({status: 0, msg: res.ErrorDescription});
               } else {
-                cb(null,null);
+                cb(null,{status: 0, msg: ''});
               }
             });
           },
-          function (cb) {
+          function (status, cb) {
             orderIFS.setOrderPaymentType(data, function (err, res) {
               if (err) {
                 console.log('setOrderPaymentType err: ' + err);

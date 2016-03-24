@@ -96,7 +96,7 @@ exports.reBuyByOrderIdXML = function (obj) {
 
 exports.setOrderPaymentTypeXML = function (obj) {
   var xmlObj = [{
-    SetOrderTypePaymentType: [
+    SetOrderPaymentType: [
       {
         _attr: {
           xmlns: 'http://tempuri.org/'

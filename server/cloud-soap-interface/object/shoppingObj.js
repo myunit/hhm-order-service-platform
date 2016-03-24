@@ -6,6 +6,7 @@
 var xml = require('xml');
 
 exports.createPaymentXML = function (obj) {
+  console.log(JSON.stringify(obj));
   var xmlObj = [{
     CreatePayment: [
       {
@@ -32,7 +33,7 @@ exports.createPaymentXML = function (obj) {
         tradeNo: obj.tradeId
       },
       {
-        paymentType: obj.paymentType
+        paymentType: obj.type
       }
     ]
   }];
