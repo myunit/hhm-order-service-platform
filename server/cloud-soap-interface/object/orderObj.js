@@ -93,3 +93,26 @@ exports.reBuyByOrderIdXML = function (obj) {
 
   return xml(xmlObj, true);
 };
+
+exports.setOrderPaymentTypeXML = function (obj) {
+  var xmlObj = [{
+    SetOrderTypePaymentType: [
+      {
+        _attr: {
+          xmlns: 'http://tempuri.org/'
+        }
+      },
+      {
+        customerSysNo: obj.userId
+      },
+      {
+        orderSysNo: obj.orderId
+      },
+      {
+        paymentType: obj.note
+      }
+    ]
+  }];
+
+  return xml(xmlObj, true);
+};
