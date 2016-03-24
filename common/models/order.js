@@ -4,12 +4,15 @@
  * @description
  */
 var loopback = require('loopback');
+var async = require('async');
 var OrderIFS = require('../../server/cloud-soap-interface/order-ifs');
+var ShoppingIFS = require('../../server/cloud-soap-interface/shopping-ifs');
 
 module.exports = function (Order) {
   Order.getApp(function (err, app) {
 
     var orderIFS = new OrderIFS(app);
+    var shoppingIFS = new ShoppingIFS(app);
 
     //获取订单列表
     Order.getOrderList = function (data, cb) {
@@ -165,6 +168,110 @@ module.exports = function (Order) {
         ],
         returns: {arg: 'repData', type: 'string'},
         http: {path: '/rebuy-by-orderId', verb: 'post'}
+      }
+    );
+
+    //创建支付记录
+    Order.createPaymentRecord = function (data, callback) {
+      async.waterfall(
+        [
+          function (cb) {
+            shoppingIFS.createPayment(data, function (err, res) {
+              if (err) {
+                console.log('createPayment err: ' + err);
+                cb({status: 0, msg: '操作异常'});
+                return;
+              }
+
+              if (!res.IsSuccess) {
+                console.error('createPayment result err: ' + res.ErrorDescription);
+                cb({status: 0, msg: res.ErrorDescription});
+              } else {
+                cb(null,{status: 0, msg: ''});
+              }
+            });
+          },
+          function (status, cb) {
+            orderIFS.setOrderPaymentType(data, function (err, res) {
+              if (err) {
+                console.log('setOrderPaymentType err: ' + err);
+                cb({status: 0, msg: '操作异常'});
+                return;
+              }
+
+              if (!res) {
+                cb({status: 0, msg: '设置订单状态失败'});
+              } else {
+                cb(null, {status: 1, msg: ''});
+              }
+            });
+          }
+        ],
+        function (err, msg) {
+          if (err) {
+            callback(null, err);
+          } else {
+            callback(null, msg);
+          }
+        }
+      );
+
+    };
+
+    Order.remoteMethod(
+      'createPaymentRecord',
+      {
+        description: [
+          '创建支付记录.返回结果-status:操作结果 0 失败 1 成功, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '设置订单支付状态 {"userId":int, "orderId":int, "note":"string", "buyer":"string",',
+              ' "total":double, "tradeId":"string", "type":int}',
+              'note:支付描述(微信支付or支付宝支付), buyer:购买者昵称, total:金额, trade:订单流水号, type:支付类型(微信13,支付宝14)'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/create-payment-record', verb: 'post'}
+      }
+    );
+
+    //设置订单支付状态(只在货到付款时使用)
+    Order.setOrderPaymentType = function (data, cb) {
+      orderIFS.setOrderPaymentType(data, function (err, res) {
+        if (err) {
+          console.log('setOrderPaymentType err: ' + err);
+          cb(null, {status: 0, msg: '操作异常'});
+          return;
+        }
+
+        if (!res) {
+          cb(null, {status: 0, msg: '设置订单状态失败'});
+        } else {
+          cb(null, {status: 1, msg: ''});
+        }
+      });
+    };
+
+    Order.remoteMethod(
+      'setOrderPaymentType',
+      {
+        description: [
+          '设置订单支付状态(只在货到付款时使用).返回结果-status:操作结果 0 失败 1 成功, msg:附带信息'
+        ],
+        accepts: [
+          {
+            arg: 'data', type: 'object', required: true, http: {source: 'body'},
+            description: [
+              '设置订单支付状态 {"userId":int, "orderId":int}'
+            ]
+          }
+        ],
+        returns: {arg: 'repData', type: 'string'},
+        http: {path: '/set-order-payment', verb: 'post'}
       }
     );
 

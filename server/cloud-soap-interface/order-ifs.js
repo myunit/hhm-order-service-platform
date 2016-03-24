@@ -64,3 +64,16 @@ OrderIFS.prototype.reBuyByOrderId = function (obj, callback) {
     }
   });
 };
+
+OrderIFS.prototype.setOrderPaymentType = function (obj, callback) {
+  var Order = this.DS.models.Order;
+  var xml = orderObj.setOrderPaymentTypeXML(obj);
+  Order.SetOrderPaymentType(xml, function (err, response) {
+    try {
+      callback(err, JSON.parse(response.SetOrderPaymentTypeResult));
+    } catch (e) {
+      console.error('OrderIFS setOrderPaymentType Exception: ' + e);
+      callback(err, {IsSuccess: false, ErrorDescription:'服务异常'});
+    }
+  });
+};

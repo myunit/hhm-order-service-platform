@@ -41,6 +41,19 @@
       "principalId": "$authenticated",
       "permission": "ALLOW",
       "property": "reBuyByOrderId"
+    },
+    {
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "createPaymentRecord"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "setOrderPaymentType"
     }
   ],
   "methods": {}
