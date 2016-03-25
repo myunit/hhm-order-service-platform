@@ -44,7 +44,7 @@ module.exports = function (Order) {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
               '获取订单列表 {"userId":int, "pageId":int, "pageSize":int, "type":int, "orderStatus":int}',
-              'type:时间分类(0一个月以前, 1一个月以内), orderStatus:订单状态(0全部,1历史,2待审核,3待发货,4缺货,5已发货,6取消,',
+              'type:时间分类(0一个月以内, 1一个月以前), orderStatus:订单状态(0全部,1历史,2待审核,3待发货,4缺货,5已发货,6取消,',
               '7取消失败,8已审核,9部分发货,99已付款，100未付款,101部分付款)'
             ]
           }
@@ -185,9 +185,9 @@ module.exports = function (Order) {
 
               if (!res.IsSuccess) {
                 console.error('createPayment result err: ' + res.ErrorDescription);
-                cb({status: 0, msg: res.ErrorDescription});
+                cb({status: 0, msg: '创建支付记录失败'});
               } else {
-                cb(null,{status: 0, msg: ''});
+                cb(null,{status: 1, msg: ''});
               }
             });
           },
@@ -201,6 +201,21 @@ module.exports = function (Order) {
 
               if (!res) {
                 cb({status: 0, msg: '设置订单状态失败'});
+              } else {
+                cb(null, {status: 1, msg: ''});
+              }
+            });
+          },
+          function (status, cb) {
+            orderIFS.auditOrder(data, function (err, res) {
+              if (err) {
+                console.log('auditOrder err: ' + err);
+                cb({status: 0, msg: '操作异常'});
+                return;
+              }
+
+              if (!res) {
+                cb({status: 0, msg: '审核订单状态'});
               } else {
                 cb(null, {status: 1, msg: ''});
               }
