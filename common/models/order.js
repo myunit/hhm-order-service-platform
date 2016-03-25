@@ -44,7 +44,7 @@ module.exports = function (Order) {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
               '获取订单列表 {"userId":int, "pageId":int, "pageSize":int, "type":int, "orderStatus":int}',
-              'type:时间分类(0一个月以前, 1一个月以内), orderStatus:订单状态(0全部,1历史,2待审核,3待发货,4缺货,5已发货,6取消,',
+              'type:时间分类(0一个月以内, 1一个月以前), orderStatus:订单状态(0全部,1历史,2待审核,3待发货,4缺货,5已发货,6取消,',
               '7取消失败,8已审核,9部分发货,99已付款，100未付款,101部分付款)'
             ]
           }
