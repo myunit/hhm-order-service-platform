@@ -185,9 +185,9 @@ module.exports = function (Order) {
 
               if (!res.IsSuccess) {
                 console.error('createPayment result err: ' + res.ErrorDescription);
-                cb({status: 0, msg: res.ErrorDescription});
+                cb({status: 0, msg: '创建支付记录失败'});
               } else {
-                cb(null,{status: 0, msg: ''});
+                cb(null,{status: 1, msg: ''});
               }
             });
           },
@@ -201,6 +201,21 @@ module.exports = function (Order) {
 
               if (!res) {
                 cb({status: 0, msg: '设置订单状态失败'});
+              } else {
+                cb(null, {status: 1, msg: ''});
+              }
+            });
+          },
+          function (status, cb) {
+            orderIFS.auditOrder(data, function (err, res) {
+              if (err) {
+                console.log('auditOrder err: ' + err);
+                cb({status: 0, msg: '操作异常'});
+                return;
+              }
+
+              if (!res) {
+                cb({status: 0, msg: '审核订单状态'});
               } else {
                 cb(null, {status: 1, msg: ''});
               }
