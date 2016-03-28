@@ -69,6 +69,9 @@ module.exports = function (Order) {
         } else {
           delete res.IsSuccess;
           delete res.ErrorDescription;
+          if (res.PayMent !== '货到付款') {
+            res.PayMent = '在线付款';
+          }
           cb(null, {status: 1, order: res, msg: ''});
         }
       });
