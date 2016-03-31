@@ -210,19 +210,23 @@ module.exports = function (Order) {
             });
           },
           function (status, cb) {
-            orderIFS.auditOrder(data, function (err, res) {
-              if (err) {
-                console.log('auditOrder err: ' + err);
-                cb({status: 0, msg: '操作异常'});
-                return;
-              }
+            if (data.note !== '货到付款') {
+              orderIFS.auditOrder(data, function (err, res) {
+                if (err) {
+                  console.log('auditOrder err: ' + err);
+                  cb({status: 0, msg: '操作异常'});
+                  return;
+                }
 
-              if (!res) {
-                cb({status: 0, msg: '审核订单状态'});
-              } else {
-                cb(null, {status: 1, msg: ''});
-              }
-            });
+                if (!res) {
+                  cb({status: 0, msg: '审核订单状态'});
+                } else {
+                  cb(null, {status: 1, msg: ''});
+                }
+              });
+            } else {
+              cb(null, {status: 1, msg: ''});
+            }
           }
         ],
         function (err, msg) {
