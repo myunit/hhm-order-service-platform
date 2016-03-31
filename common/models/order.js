@@ -210,19 +210,23 @@ module.exports = function (Order) {
             });
           },
           function (status, cb) {
-            orderIFS.auditOrder(data, function (err, res) {
-              if (err) {
-                console.log('auditOrder err: ' + err);
-                cb({status: 0, msg: '操作异常'});
-                return;
-              }
+            if (data.note !== '货到付款') {
+              orderIFS.auditOrder(data, function (err, res) {
+                if (err) {
+                  console.log('auditOrder err: ' + err);
+                  cb({status: 0, msg: '操作异常'});
+                  return;
+                }
 
-              if (!res) {
-                cb({status: 0, msg: '审核订单状态'});
-              } else {
-                cb(null, {status: 1, msg: ''});
-              }
-            });
+                if (!res) {
+                  cb({status: 0, msg: '审核订单状态'});
+                } else {
+                  cb(null, {status: 1, msg: ''});
+                }
+              });
+            } else {
+              cb(null, {status: 1, msg: ''});
+            }
           }
         ],
         function (err, msg) {
@@ -284,7 +288,8 @@ module.exports = function (Order) {
           {
             arg: 'data', type: 'object', required: true, http: {source: 'body'},
             description: [
-              '设置订单支付状态 {"userId":int, "orderId":int}'
+              '设置订单支付状态 {"userId":int, "orderId":int, "note":"string"}',
+              'note:货到付款'
             ]
           }
         ],
