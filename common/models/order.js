@@ -252,7 +252,7 @@ module.exports = function (Order) {
             description: [
               '设置订单支付状态 {"userId":int, "orderId":int, "note":"string", "buyer":"string", "seller":"string"',
               ' "total":double, "tradeId":"string", "type":int}',
-              'note:支付描述(微信支付or支付宝支付), buyer:购买者昵称, total:金额, trade:订单流水号, type:支付类型(微信13,支付宝14)'
+              'note:支付描述(微信支付or支付宝支付), buyer:购买者昵称, total:金额, trade:订单流水号, type:支付类型(微信13,支付宝1)'
             ]
           }
         ],
