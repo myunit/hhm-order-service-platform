@@ -30,7 +30,7 @@ exports.createPaymentXML = function (obj) {
         totalFee: obj.total
       },
       {
-        tradeNo: obj.tradeId
+        tradeNO: obj.tradeId
       },
       {
         paymentType: obj.type
