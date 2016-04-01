@@ -24,7 +24,7 @@ exports.createPaymentXML = function (obj) {
         orderId: obj.orderId
       },
       {
-        seller: ''
+        seller: obj.seller || ''
       },
       {
         totalFee: obj.total
