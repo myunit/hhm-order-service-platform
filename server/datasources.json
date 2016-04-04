@@ -11,15 +11,15 @@
     "connector": "redis"
   },
   "OrderSoap": {
-    "url": "http://122.225.60.230:7008/PC_API/OrderService.svc",
+    "url": "http://120.26.200.115:8101/PC_API/OrderService.svc",
     "name": "OrderSoap",
     "connector": "soap",
-    "wsdl": "http://122.225.60.230:7008/PC_API/OrderService.svc?WSDL"
+    "wsdl": "http://120.26.200.115:8101/PC_API/OrderService.svc?WSDL"
   },
   "ShoppingSoap": {
-  "url": "http://122.225.60.230:7008/PC_API/ShoppingService.svc",
+  "url": "http://120.26.200.115:8101/PC_API/ShoppingService.svc",
   "name": "ShoppingSoap",
   "connector": "soap",
-  "wsdl": "http://122.225.60.230:7008/PC_API/ShoppingService.svc?WSDL"
+  "wsdl": "http://120.26.200.115:8101/PC_API/ShoppingService.svc?WSDL"
 }
 }
